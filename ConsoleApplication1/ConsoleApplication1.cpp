@@ -13,6 +13,7 @@ template <typename T>
 class BinTree {
 private:
     Node<T>* first;
+
     unsigned long size;
     template <typename T>
     void print(Node<T>* tmp, int l) {
@@ -26,21 +27,7 @@ private:
             l += 1;
         }
     }
-
-    template <typename T>
-    void insert(Node<T>** tmp,T val) {
-        if (*tmp == NULL) {
-           *tmp = new Node<T>(val);
-        }
-        else {
-            if ((*tmp)->value >= val) {
-                insert((&(*tmp)->left), val);
-            }
-            if((*tmp)->value < val) {
-                insert((&(*tmp)->right), val);
-            }
-        }
-    }
+    
 
     template <typename T>
     Node<T>* remove(Node<T>* root, T val) {
@@ -85,8 +72,30 @@ public:
 
     template <typename T>
     void add(T val) {
-        insert(&this->first, val);
+        Node<T>* forInsert = new Node<T>(val);
+        Node<T>* tmp = this->first;
+        Node<T>* tmp2 = NULL;
+        while (tmp != NULL) {
+            tmp2 = tmp;
+            if (val < tmp->value) {
+                tmp = tmp->left;
+            }
+            else {
+                tmp = tmp->right;
+            }
+        }
+
+        if (tmp2 == NULL) {
+            this->first = forInsert;
+        }
+        else if (val < tmp2->value) {
+            tmp2->left = forInsert;
+        }
+        else {
+            tmp2->right = forInsert;
+        }
     }
+
     template <typename T>
     void del(T val) {
         remove(first, val);
